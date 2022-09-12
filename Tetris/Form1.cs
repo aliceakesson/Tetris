@@ -13,24 +13,68 @@ namespace Tetris
     public enum Block
     {
         Yellow,
-        Red
+        Red, 
+        Orange, 
+        Blue, 
+        Purple, 
+        Green, 
+        Turquoise
     }
     public partial class Form1 : Form
     {
-
+        
         bool gameOver = false; 
 
-        int amountOfBlocks = 10; //??
         int blockSize = 30;
         int blockSize_Margin = 1;
         
         Point spawnPosition;
 
-        int panelWidth = 12, panelHeight = 22;
+        int panelWidth = 10 + 2, panelHeight = 20 + 2;
 
         int count = 0;
 
         Panel currentBlock = new Panel();
+        Block currentType;
+
+        int[,] block_placeHolders;
+
+        bool collision = false;
+
+        int[,] positions_Yellow =
+        {
+            { 1, 1 },
+            { 1, 1 }
+        };
+        int[,] positions_Red =
+        {
+            { 1, 1, 0 },
+            { 0, 1, 1 }
+        };
+        int[,] positions_Orange =
+        {
+            { 0, 0, 0, 1 },
+            { 1, 1, 1, 1 }
+        };
+        int[,] positions_Blue =
+        {
+            { 1, 0, 0, 0 },
+            { 1, 1, 1, 1 }
+        };
+        int[,] positions_Purple =
+        {
+            { 0, 1, 0 },
+            { 1, 1, 1 }
+        };
+        int[,] positions_Green =
+        {
+            { 0, 1, 1 },
+            { 1, 1, 0 }
+        };
+        int[,] positions_Turquoise =
+        {
+            { 1, 1, 1, 1 }
+        };
 
         public Form1()
         {
@@ -51,8 +95,19 @@ namespace Tetris
             currentBlock.Visible = true;
             currentBlock.BringToFront();
 
+            block_placeHolders = new int[panelHeight - 2, panelWidth - 2];
+            for(int i = 0; i < (panelHeight-2); i++)
+            {
+                for(int j = 0; j < (panelWidth-2); j++)
+                {
+                    block_placeHolders[i, j] = 0; 
+                }
+            }
+            
             CreatePlayArea();
             SpawnBlock(Block.Yellow);
+
+            //CheckPlayArea();
         }
 
         //Update 
@@ -65,41 +120,254 @@ namespace Tetris
         //update function for moving the current block etc. 
         private void movingTimer_Tick(object sender, EventArgs e)
         {
-            int x = currentBlock.Location.X;
-            int y = currentBlock.Location.Y;
 
-            currentBlock.Location = new Point(x, y + blockSize);
+            if(!gameOver)
+            {
+                CheckCollision();
+
+                if (!collision)
+                {
+                    int x = currentBlock.Location.X;
+                    int y = currentBlock.Location.Y;
+
+                    currentBlock.Location = new Point(x, y + blockSize);
+                }
+
+                collision = false;
+            }
+
         }
 
         void SpawnBlock(Block type)
         {
+
             switch(type)
             {
                 case Block.Yellow:
+                    currentType = type;
                     currentBlock.Controls.Clear();
                     currentBlock.SetBounds(spawnPosition.X - blockSize, spawnPosition.Y, blockSize * 2, blockSize * 2);
 
-                    for(int i = 0; i < 2; i++)
+                    for (int i = 0; i < positions_Yellow.GetLength(0); i++)
                     {
-                        for(int j = 0; j < 2; j++)
+                        for (int j = 0; j < positions_Yellow.GetLength(1); j++)
                         {
-                            PictureBox pb = new PictureBox();
-                            pb.BackColor = Color.Yellow; 
-                            pb.Parent = currentBlock;
-
-                            pb.Visible = true; 
-                            pb.SetBounds(blockSize * i, blockSize * j, blockSize - blockSize_Margin, blockSize-blockSize_Margin);
-                            pb.Show();
+                            if (positions_Yellow[i, j] == 1)
+                            {
+                                PictureBox pb = new PictureBox();
+                                pb.SetBounds(blockSize * j, blockSize * i, blockSize - blockSize_Margin, blockSize - blockSize_Margin);
+                                pb.Parent = currentBlock;
+                                pb.Visible = true;
+                                pb.BackColor = Color.Yellow;
+                            }
                         }
                     }
 
                     break;
                 case Block.Red:
+                    currentType = type;
+                    currentBlock.Controls.Clear();
+                    currentBlock.SetBounds(spawnPosition.X - blockSize, spawnPosition.Y, blockSize * 3, blockSize * 2);
+
+                    for(int i = 0; i < positions_Red.GetLength(0); i++)
+                    {
+                        for(int j = 0; j < positions_Red.GetLength(1); j++)
+                        {
+                            if(positions_Red[i, j] == 1)
+                            {
+                                PictureBox pb = new PictureBox();
+                                pb.SetBounds(blockSize * j, blockSize * i, blockSize - blockSize_Margin, blockSize - blockSize_Margin);
+                                pb.Parent = currentBlock;
+                                pb.Visible = true;
+                                pb.BackColor = Color.Red;
+                            }
+                        }
+                    }
+                    break;
+                case Block.Orange:
+                    currentType = type;
+                    currentBlock.Controls.Clear();
+                    currentBlock.SetBounds(spawnPosition.X - blockSize * 2, spawnPosition.Y, blockSize * 4, blockSize * 2);
+
+                    for (int i = 0; i < positions_Orange.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < positions_Orange.GetLength(1); j++)
+                        {
+                            if (positions_Orange[i, j] == 1)
+                            {
+                                PictureBox pb = new PictureBox();
+                                pb.SetBounds(blockSize * j, blockSize * i, blockSize - blockSize_Margin, blockSize - blockSize_Margin);
+                                pb.Parent = currentBlock;
+                                pb.Visible = true;
+                                pb.BackColor = Color.Orange;
+                            }
+                        }
+                    }
+                    break;
+                case Block.Blue:
+                    currentType = type;
+                    currentBlock.Controls.Clear();
+                    currentBlock.SetBounds(spawnPosition.X - blockSize * 2, spawnPosition.Y, blockSize * 4, blockSize * 2);
+
+                    for (int i = 0; i < positions_Blue.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < positions_Blue.GetLength(1); j++)
+                        {
+                            if (positions_Blue[i, j] == 1)
+                            {
+                                PictureBox pb = new PictureBox();
+                                pb.SetBounds(blockSize * j, blockSize * i, blockSize - blockSize_Margin, blockSize - blockSize_Margin);
+                                pb.Parent = currentBlock;
+                                pb.Visible = true;
+                                pb.BackColor = Color.Blue;
+                            }
+                        }
+                    }
+                    break;
+                case Block.Purple:
+                    currentType = type;
+                    currentBlock.Controls.Clear();
+                    currentBlock.SetBounds(spawnPosition.X - blockSize, spawnPosition.Y, blockSize * 3, blockSize * 2);
+
+                    for (int i = 0; i < positions_Purple.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < positions_Purple.GetLength(1); j++)
+                        {
+                            if (positions_Purple[i, j] == 1)
+                            {
+                                PictureBox pb = new PictureBox();
+                                pb.SetBounds(blockSize * j, blockSize * i, blockSize - blockSize_Margin, blockSize - blockSize_Margin);
+                                pb.Parent = currentBlock;
+                                pb.Visible = true;
+                                pb.BackColor = Color.Purple;
+                            }
+                        }
+                    }
+                    break;
+                case Block.Green:
+                    currentType = type;
+                    currentBlock.Controls.Clear();
+                    currentBlock.SetBounds(spawnPosition.X - blockSize, spawnPosition.Y, blockSize * 4, blockSize * 2);
+
+                    for (int i = 0; i < positions_Green.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < positions_Green.GetLength(1); j++)
+                        {
+                            if (positions_Green[i, j] == 1)
+                            {
+                                PictureBox pb = new PictureBox();
+                                pb.SetBounds(blockSize * j, blockSize * i, blockSize - blockSize_Margin, blockSize - blockSize_Margin);
+                                pb.Parent = currentBlock;
+                                pb.Visible = true;
+                                pb.BackColor = Color.Green;
+                            }
+                        }
+                    }
+                    break;
+                case Block.Turquoise:
+                    currentType = type;
+                    currentBlock.Controls.Clear();
+                    currentBlock.SetBounds(spawnPosition.X - blockSize * 2, spawnPosition.Y, blockSize * 4, blockSize);
+
+                    for (int i = 0; i < positions_Turquoise.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < positions_Turquoise.GetLength(1); j++)
+                        {
+                            if (positions_Turquoise[i, j] == 1)
+                            {
+                                PictureBox pb = new PictureBox();
+                                pb.SetBounds(blockSize * j, blockSize * i, blockSize - blockSize_Margin, blockSize - blockSize_Margin);
+                                pb.Parent = currentBlock;
+                                pb.Visible = true;
+                                pb.BackColor = Color.Turquoise;
+                            }
+                        }
+                    }
                     break; 
                 default:
                     Console.WriteLine("Error in code in SpawnBlock()");
                     break;
 
+            }
+        }
+
+        void CheckCollision()
+        {
+
+            collision = false;
+
+            //Checking if it is colliding with another block
+            switch(currentType)
+            {
+                case Block.Yellow:
+                    for (int i = 0; i < positions_Yellow.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < positions_Yellow.GetLength(1); j++)
+                        {
+                            if (positions_Yellow[i, j] == 1)
+                            {
+                                int x_index = (int)(currentBlock.Location.X + blockSize * i)/blockSize; 
+                                int y_index = (int)(currentBlock.Location.Y + blockSize * j)/blockSize;
+
+                                Console.WriteLine("x: " + x_index + ", y: " + y_index);
+
+                                if(y_index == 20)
+                                {
+                                    collision = true;
+                                    break;
+                                }
+                                else if (block_placeHolders[y_index, x_index-1] == 1)
+                                {
+                                    collision = true;
+                                    break; 
+                                }
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    Console.WriteLine("Fel i kod i switch-sats i CheckCollision()");
+                    break; 
+            }
+
+            if(collision)
+            {
+                int amountOfBlocks = Enum.GetNames(typeof(Block)).Length;
+
+                Random rnd = new Random();
+                int blockIndex = rnd.Next(0, amountOfBlocks - 1);
+
+                switch (blockIndex)
+                {
+                    case 0:
+                        SpawnBlock(Block.Yellow);
+                        break;
+                    case 1:
+                        SpawnBlock(Block.Red); 
+                        break;
+                    default:
+                        Console.WriteLine("Fel värde på blockIndex i CheckCollision()");
+                        break;
+                }
+
+            }
+        }
+
+        void CheckPlayArea()
+        {
+            for (int i = 0; i < block_placeHolders.GetLength(0); i++)
+            {
+                for (int j = 0; j < block_placeHolders.GetLength(1); j++)
+                {
+                    if(j == panelWidth - 3)
+                    {
+                        Console.WriteLine(block_placeHolders[i, j]);
+                    }
+                    else
+                    {
+                        Console.Write(block_placeHolders[i, j]);    
+                    }
+                }
             }
         }
 
@@ -161,7 +429,6 @@ namespace Tetris
             }
 
         }
-
 
         private void KeyIsDown(object sender, KeyEventArgs e)
         {
