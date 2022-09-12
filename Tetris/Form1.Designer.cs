@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.gameTimer = new System.Windows.Forms.Timer(this.components);
             this.playArea = new System.Windows.Forms.Panel();
+            this.movingTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // gameTimer
@@ -44,6 +45,12 @@
             this.playArea.Name = "playArea";
             this.playArea.Size = new System.Drawing.Size(360, 660);
             this.playArea.TabIndex = 0;
+            // 
+            // movingTimer
+            // 
+            this.movingTimer.Enabled = true;
+            this.movingTimer.Interval = 1500;
+            this.movingTimer.Tick += new System.EventHandler(this.movingTimer_Tick);
             // 
             // Form1
             // 
@@ -64,6 +71,7 @@
         #endregion
         private System.Windows.Forms.Timer gameTimer;
         private System.Windows.Forms.Panel playArea;
+        private System.Windows.Forms.Timer movingTimer;
     }
 }
 

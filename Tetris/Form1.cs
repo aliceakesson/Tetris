@@ -28,6 +28,10 @@ namespace Tetris
 
         int panelWidth = 12, panelHeight = 22;
 
+        int count = 0;
+
+        Panel currentBlock = new Panel();
+
         public Form1()
         {
             InitializeComponent();
@@ -37,20 +41,34 @@ namespace Tetris
         //Init
         private void Form1_Load(object sender, EventArgs e)
         {
+
             spawnPosition = new Point(blockSize*6, blockSize*3);
             playArea.Width = panelWidth*blockSize;
-            playArea.Height = panelHeight*blockSize; 
+            playArea.Height = panelHeight*blockSize;
+
+            currentBlock.Parent = playArea;
+            currentBlock.BackColor = Color.Black;
+            currentBlock.Visible = true;
+            currentBlock.BringToFront();
 
             CreatePlayArea();
             SpawnBlock(Block.Yellow);
         }
 
-        //Update
+        //Update 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
 
+        }
 
 
+        //update function for moving the current block etc. 
+        private void movingTimer_Tick(object sender, EventArgs e)
+        {
+            int x = currentBlock.Location.X;
+            int y = currentBlock.Location.Y;
+
+            currentBlock.Location = new Point(x, y + blockSize);
         }
 
         void SpawnBlock(Block type)
@@ -58,9 +76,8 @@ namespace Tetris
             switch(type)
             {
                 case Block.Yellow:
-                    Panel p = new Panel();
-                    p.Parent = playArea;
-                    p.SetBounds(spawnPosition.X-blockSize, spawnPosition.Y, blockSize * 2, blockSize * 2);
+                    currentBlock.Controls.Clear();
+                    currentBlock.SetBounds(spawnPosition.X - blockSize, spawnPosition.Y, blockSize * 2, blockSize * 2);
 
                     for(int i = 0; i < 2; i++)
                     {
@@ -68,17 +85,13 @@ namespace Tetris
                         {
                             PictureBox pb = new PictureBox();
                             pb.BackColor = Color.Yellow; 
-                            pb.Parent = p;
+                            pb.Parent = currentBlock;
 
                             pb.Visible = true; 
                             pb.SetBounds(blockSize * i, blockSize * j, blockSize - blockSize_Margin, blockSize-blockSize_Margin);
                             pb.Show();
                         }
                     }
-
-                    p.BackColor = Color.Black; 
-                    p.Visible = true; 
-                    p.BringToFront();
 
                     break;
                 case Block.Red:
@@ -102,7 +115,9 @@ namespace Tetris
                 pb.SetBounds(blockSize*i, 0, blockSize - blockSize_Margin, blockSize - blockSize_Margin);
 
                 pb.BackColor =  Color.Gray;
-                pb.Visible = true; 
+                pb.Visible = true;
+
+                pb.BringToFront();
             }
             for (int i = 0; i < panelWidth; i++)
             {
@@ -114,6 +129,8 @@ namespace Tetris
 
                 pb.BackColor = Color.Gray;
                 pb.Visible = true;
+
+                pb.BringToFront();
             }
 
             for (int i = 0; i < panelHeight; i++)
@@ -126,6 +143,8 @@ namespace Tetris
 
                 pb.BackColor = Color.Gray;
                 pb.Visible = true;
+
+                pb.BringToFront();
             }
             for (int i = 0; i < panelHeight; i++)
             {
@@ -137,28 +156,55 @@ namespace Tetris
 
                 pb.BackColor = Color.Gray;
                 pb.Visible = true;
+
+                pb.BringToFront();
             }
 
         }
+
 
         private void KeyIsDown(object sender, KeyEventArgs e)
         {
             if(e.KeyCode == Keys.Down)
             {
-                //move active block down
+                int x = currentBlock.Location.X;
+                int y = currentBlock.Location.Y;
+
+                if (true) //statement (make later) to check if block touches another block from below
+                {
+                    currentBlock.Location = new Point(x, y + blockSize);
+                }
             }
             else if(e.KeyCode == Keys.Left)
             {
-                Console.WriteLine("test");
+                int x = currentBlock.Location.X;
+                int y = currentBlock.Location.Y;
+
+                if(x > blockSize)
+                {
+                    currentBlock.Location = new Point(x - blockSize, y);
+                }
             }
             else if(e.KeyCode == Keys.Right)
             {
+                int x = currentBlock.Location.X;
+                int y = currentBlock.Location.Y;
 
+                int rightCorner = currentBlock.Location.X + currentBlock.Width;
+
+                if(rightCorner < blockSize*(panelWidth-1))
+                {
+                    currentBlock.Location = new Point(x + blockSize, y);
+                }
             }
-            else if(e.KeyCode== Keys.Up)
+            else if(e.KeyCode == Keys.Up)
             {
                 //switch block (extra for later)
             }  
+            else if(e.KeyCode == Keys.Space)
+            {
+                //make block go down the furthest instantly
+            }
         }
 
     }
