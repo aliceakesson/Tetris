@@ -106,14 +106,14 @@ namespace Tetris
                 }
             }
 
-            for(int i = 0; i < blockPositions.GetLength(0); i++)
+            for(int y = 0; y < blockPositions.GetLength(0); y++) 
             {
-                for(int j = 0; j < blockPositions.GetLength(1); j++)
+                for(int x = 0; x < blockPositions.GetLength(1); x++)
                 {
-                    blockPositions[i, j] = new PictureBox();
-                    blockPositions[i, j].Parent = playArea;
-                    blockPositions[i, j].SetBounds(blockSize*(j+1), blockSize*(i+1), blockSize - blockSize_Margin, blockSize - blockSize_Margin);
-                    blockPositions[i, j].Visible = false;
+                    blockPositions[y, x] = new PictureBox();
+                    blockPositions[y, x].Parent = playArea;
+                    blockPositions[y, x].SetBounds(blockSize*(x+1), blockSize*(y+1), blockSize - blockSize_Margin, blockSize - blockSize_Margin);
+                    blockPositions[y, x].Visible = false;
                 }
             }
             
@@ -138,13 +138,13 @@ namespace Tetris
             {
                 CheckCollision();
 
-                //if (!collision)
-                //{
-                //    int x = currentBlock.Location.X;
-                //    int y = currentBlock.Location.Y;
+                if (!collision)
+                {
+                    int x = currentBlock.Location.X;
+                    int y = currentBlock.Location.Y;
 
-                //    currentBlock.Location = new Point(x, y + blockSize);
-                //}
+                    currentBlock.Location = new Point(x, y + blockSize);
+                }
 
                 collision = false;
             }
@@ -322,8 +322,6 @@ namespace Tetris
                                 int x_index = (int)(currentBlock.Location.X + blockSize * i)/blockSize; 
                                 int y_index = (int)(currentBlock.Location.Y + blockSize * j)/blockSize;
 
-                                Console.WriteLine("x: " + x_index + ", y: " + y_index);
-
                                 if(y_index == 20)
                                 {
                                     collision = true;
@@ -357,8 +355,6 @@ namespace Tetris
                                 {
                                     int x_index = (int)(currentBlock.Location.X + blockSize * i) / blockSize;
                                     int y_index = (int)(currentBlock.Location.Y + blockSize * j) / blockSize;
-
-                                    Console.WriteLine("x: " + x_index + ", y: " + y_index);
 
                                     block_placeHolders[y_index - 1, x_index - 1] = 1;
                                     blockPositions[y_index - 1, x_index - 1].Visible = true;
