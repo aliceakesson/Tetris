@@ -117,7 +117,7 @@ namespace Tetris
         }
 
 
-        //update function for moving the current block etc. 
+        //update function for moving the current block etc.  
         private void movingTimer_Tick(object sender, EventArgs e)
         {
 
