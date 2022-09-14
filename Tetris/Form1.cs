@@ -30,9 +30,7 @@ namespace Tetris
         
         Point spawnPosition;
 
-        int panelWidth = 10 + 2, panelHeight = 20 + 2;
-
-        int count = 0;
+        int panelWidth = 10 + 2, panelHeight = 20 + 2; // Count for walls
 
         Panel currentBlock = new Panel();
         Block currentType;
@@ -118,7 +116,7 @@ namespace Tetris
             }
             
             CreatePlayArea();
-            SpawnBlock(Block.Yellow);
+            SpawnBlock(Block.Red);
 
             //CheckPlayArea();
         }
@@ -336,6 +334,30 @@ namespace Tetris
                         }
                     }
                     break;
+                case Block.Red:
+                    for (int i = 0; i < positions_Red.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < positions_Red.GetLength(1); j++)
+                        {
+                            if (positions_Red[i, j] == 1)
+                            {
+                                int x_index = (int)(currentBlock.Location.X + blockSize * i) / blockSize;
+                                int y_index = (int)(currentBlock.Location.Y + blockSize * j) / blockSize;
+
+                                if (y_index == 20)
+                                {
+                                    collision = true;
+                                    break;
+                                }
+                                else if (block_placeHolders[y_index, x_index - 1] == 1)
+                                {
+                                    collision = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    break; 
                 default:
                     Console.WriteLine("Fel i kod i switch-sats i CheckCollision()");
                     break; 
@@ -363,6 +385,23 @@ namespace Tetris
                             }
                         }
                         break;
+                    case Block.Red:
+                        for (int i = 0; i < positions_Red.GetLength(0); i++)
+                        {
+                            for (int j = 0; j < positions_Red.GetLength(1); j++)
+                            {
+                                if (positions_Red[i, j] == 1)
+                                {
+                                    int x_index = (int)(currentBlock.Location.X + blockSize * i) / blockSize;
+                                    int y_index = (int)(currentBlock.Location.Y + blockSize * j) / blockSize;
+
+                                    block_placeHolders[y_index - 1, x_index - 1] = 1;
+                                    blockPositions[y_index - 1, x_index - 1].Visible = true;
+                                    blockPositions[y_index - 1, x_index - 1].BackColor = Color.Red;
+                                }
+                            }
+                        }
+                        break; 
                     default:
                         break; 
                 }
