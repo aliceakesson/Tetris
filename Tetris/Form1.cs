@@ -392,12 +392,12 @@ namespace Tetris
                             {
                                 if (positions_Red[i, j] == 1)
                                 {
-                                    int x_index = (int)(currentBlock.Location.X + blockSize * i) / blockSize;
-                                    int y_index = (int)(currentBlock.Location.Y + blockSize * j) / blockSize;
+                                    int x_index = (int)(currentBlock.Location.X + blockSize * j) / blockSize;
+                                    int y_index = (int)(currentBlock.Location.Y + blockSize * i) / blockSize;
 
-                                    block_placeHolders[y_index - 1, x_index - 1] = 1;
-                                    blockPositions[y_index - 1, x_index - 1].Visible = true;
-                                    blockPositions[y_index - 1, x_index - 1].BackColor = Color.Red;
+                                    block_placeHolders[y_index, x_index - 1] = 1;
+                                    blockPositions[y_index, x_index - 1].Visible = true;
+                                    blockPositions[y_index, x_index - 1].BackColor = Color.Red;
                                 }
                             }
                         }
@@ -425,7 +425,7 @@ namespace Tetris
 
             }
 
-            //CheckPlayArea();
+            CheckPlayArea();
         }
 
         void CheckPlayArea()
