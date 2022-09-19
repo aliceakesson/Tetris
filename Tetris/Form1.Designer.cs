@@ -49,7 +49,6 @@
             // movingTimer
             // 
             this.movingTimer.Enabled = true;
-            this.movingTimer.Interval = 1500;
             this.movingTimer.Tick += new System.EventHandler(this.movingTimer_Tick);
             // 
             // Form1

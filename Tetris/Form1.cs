@@ -76,6 +76,10 @@ namespace Tetris
 
         PictureBox[,] blockPositions = new PictureBox[20, 10];
 
+        int movingInterval = 1500; //milliseconds
+        int timerInterval = 100;
+        int timerCount = 0;
+
         public Form1()
         {
             InitializeComponent();
@@ -132,19 +136,25 @@ namespace Tetris
         private void movingTimer_Tick(object sender, EventArgs e)
         {
 
-            if(!gameOver)
+            timerCount++;  
+            if(timerCount >= (movingInterval / timerInterval))
             {
-                CheckCollision();
+                timerCount = 0;
 
-                if (!collision)
+                if (!gameOver)
                 {
-                    int x = currentBlock.Location.X;
-                    int y = currentBlock.Location.Y;
+                    CheckCollision();
 
-                    currentBlock.Location = new Point(x, y + blockSize);
+                    if (!collision)
+                    {
+                        int x = currentBlock.Location.X;
+                        int y = currentBlock.Location.Y;
+
+                        currentBlock.Location = new Point(x, y + blockSize);
+                    }
+
+                    collision = false;
                 }
-
-                collision = false;
             }
 
         }
