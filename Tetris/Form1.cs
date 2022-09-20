@@ -100,9 +100,9 @@ namespace Tetris
             currentBlock.BringToFront();
 
             block_placeHolders = new int[panelHeight - 2, panelWidth - 2];
-            for(int i = 0; i < (panelHeight-2); i++)
+            for(int i = 0; i < block_placeHolders.GetLength(0); i++) // i = y, j = x
             {
-                for(int j = 0; j < (panelWidth-2); j++)
+                for(int j = 0; j < block_placeHolders.GetLength(1); j++)
                 {
                     block_placeHolders[i, j] = 0; 
                 }
@@ -114,6 +114,8 @@ namespace Tetris
                 {
                     blockPositions[y, x] = new PictureBox();
                     blockPositions[y, x].Parent = playArea;
+
+                    //(+1 to count for walls on left side and on the top)
                     blockPositions[y, x].SetBounds(blockSize*(x+1), blockSize*(y+1), blockSize - blockSize_Margin, blockSize - blockSize_Margin);
                     blockPositions[y, x].Visible = false;
                 }
