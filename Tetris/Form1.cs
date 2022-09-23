@@ -100,11 +100,11 @@ namespace Tetris
             currentBlock.BringToFront();
 
             block_placeHolders = new int[panelHeight - 2, panelWidth - 2];
-            for(int i = 0; i < block_placeHolders.GetLength(0); i++) // i = y, j = x
+            for(int y = 0; y < block_placeHolders.GetLength(0); y++) 
             {
-                for(int j = 0; j < block_placeHolders.GetLength(1); j++)
+                for(int x = 0; x < block_placeHolders.GetLength(1); x++)
                 {
-                    block_placeHolders[i, j] = 0; 
+                    block_placeHolders[y, x] = 0; 
                 }
             }
 
@@ -127,18 +127,19 @@ namespace Tetris
             //CheckPlayArea();
         }
 
-        //Update 
+        //Update function
         private void gameTimer_Tick(object sender, EventArgs e)
         {
 
         }
 
 
-        //update function for moving the current block etc.  
+        //Update function for moving the current block etc.  
         private void movingTimer_Tick(object sender, EventArgs e)
         {
 
             timerCount++;  
+            // Go into if-statement every time timerCount goes up to its limit
             if(timerCount >= (movingInterval / timerInterval))
             {
                 timerCount = 0;
@@ -147,7 +148,7 @@ namespace Tetris
                 {
                     CheckCollision();
 
-                    if (!collision)
+                    if (!collision) //Move block down if it hasn't collided with anything yet
                     {
                         int x = currentBlock.Location.X;
                         int y = currentBlock.Location.Y;
@@ -168,17 +169,17 @@ namespace Tetris
             {
                 case Block.Yellow:
                     currentType = type;
-                    currentBlock.Controls.Clear();
+                    currentBlock.Controls.Clear(); //Remove the current children of the object
                     currentBlock.SetBounds(spawnPosition.X - blockSize, spawnPosition.Y, blockSize * 2, blockSize * 2);
 
-                    for (int i = 0; i < positions_Yellow.GetLength(0); i++)
+                    for (int y = 0; y < positions_Yellow.GetLength(0); y++)
                     {
-                        for (int j = 0; j < positions_Yellow.GetLength(1); j++)
+                        for (int x = 0; x < positions_Yellow.GetLength(1); x++)
                         {
-                            if (positions_Yellow[i, j] == 1)
+                            if (positions_Yellow[y, x] == 1)
                             {
                                 PictureBox pb = new PictureBox();
-                                pb.SetBounds(blockSize * j, blockSize * i, blockSize - blockSize_Margin, blockSize - blockSize_Margin);
+                                pb.SetBounds(blockSize * x, blockSize * y, blockSize - blockSize_Margin, blockSize - blockSize_Margin);
                                 pb.Parent = currentBlock;
                                 pb.Visible = true;
                                 pb.BackColor = Color.Yellow;
@@ -353,6 +354,11 @@ namespace Tetris
                         {
                             if (positions_Red[i, j] == 1)
                             {
+                                /*
+                                  1 1 0
+                                  0 1 1
+                                 */
+
                                 int x_index = (int)(currentBlock.Location.X + blockSize * i) / blockSize;
                                 int y_index = (int)(currentBlock.Location.Y + blockSize * j) / blockSize;
 
