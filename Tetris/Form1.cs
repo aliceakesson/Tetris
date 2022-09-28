@@ -356,7 +356,7 @@ namespace Tetris
                             {
                                 /*
                                   1 1 0
-                                  0 1 1
+                                  0 1 1 
                                  */
 
                                 int x_index = (int)(currentBlock.Location.X + blockSize * i) / blockSize;
