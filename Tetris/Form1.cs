@@ -36,7 +36,7 @@ namespace Tetris
         Panel currentBlock = new Panel();
         Block currentType;
 
-        int[,] block_placeHolders;
+        int[,] block_placeHolders; // Array to check in what positions there's blocks
 
         bool collision = false;
 
@@ -75,7 +75,7 @@ namespace Tetris
             { 1, 1, 1, 1 }
         };
 
-        PictureBox[,] blockPositions = new PictureBox[20, 10];
+        PictureBox[,] blockPositions; // Array for all the blocks in order 
 
         int movingInterval = 1500; //milliseconds
         int timerInterval = 100;
@@ -109,6 +109,7 @@ namespace Tetris
                 }
             }
 
+            blockPositions = new PictureBox[panelHeight - 2, panelWidth - 2];
             for(int y = 0; y < blockPositions.GetLength(0); y++) 
             {
                 for(int x = 0; x < blockPositions.GetLength(1); x++)
@@ -144,7 +145,6 @@ namespace Tetris
             if(timerCount >= (movingInterval / timerInterval))
             {
                 timerCount = 0;
-
                 if (!gameOver)
                 {
                     CheckCollision();
@@ -444,7 +444,7 @@ namespace Tetris
 
             }
 
-            CheckPlayArea();
+            //CheckPlayArea();
         }
 
         void CheckPlayArea()
