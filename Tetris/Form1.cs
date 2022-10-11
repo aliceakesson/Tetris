@@ -331,8 +331,8 @@ namespace Tetris
                         {
                             if (positions_Yellow[i, j] == 1)
                             {
-                                int x_index = (int)(currentBlock.Location.X + blockSize * i)/blockSize; 
-                                int y_index = (int)(currentBlock.Location.Y + blockSize * j)/blockSize;
+                                int x_index = (int)(currentBlock.Location.X + blockSize * j)/blockSize; 
+                                int y_index = (int)(currentBlock.Location.Y + blockSize * i)/blockSize;
 
                                 if(y_index == 20)
                                 {
@@ -360,8 +360,8 @@ namespace Tetris
                                   0 1 1 
                                  */
 
-                                int x_index = (int)(currentBlock.Location.X + blockSize * i) / blockSize;
-                                int y_index = (int)(currentBlock.Location.Y + blockSize * j) / blockSize;
+                                int x_index = (int)(currentBlock.Location.X + blockSize * j) / blockSize;
+                                int y_index = (int)(currentBlock.Location.Y + blockSize * i) / blockSize;
 
                                 if (y_index == 20)
                                 {
@@ -409,14 +409,14 @@ namespace Tetris
                         {
                             for (int j = 0; j < positions_Red.GetLength(1); j++)
                             {
-                                if (positions_Red[i, j] == 1)
+                                if (positions_Red[i, j] == 1) //For each blockposition for red, add block in area
                                 {
                                     int x_index = (int)(currentBlock.Location.X + blockSize * j) / blockSize;
                                     int y_index = (int)(currentBlock.Location.Y + blockSize * i) / blockSize;
-
-                                    block_placeHolders[y_index, x_index - 1] = 1;
-                                    blockPositions[y_index, x_index - 1].Visible = true;
-                                    blockPositions[y_index, x_index - 1].BackColor = Color.Red;
+                                    
+                                    block_placeHolders[y_index - 1, x_index - 1] = 1;
+                                    blockPositions[y_index - 1, x_index - 1].Visible = true;
+                                    blockPositions[y_index - 1, x_index - 1].BackColor = Color.Red;
                                 }
                             }
                         }
