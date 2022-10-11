@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Tetris
@@ -96,7 +90,7 @@ namespace Tetris
             playArea.Height = panelHeight*blockSize;
 
             currentBlock.Parent = playArea;
-            currentBlock.BackColor = Color.Black;
+            currentBlock.BackColor = Color.Transparent;
             currentBlock.Visible = true;
             currentBlock.BringToFront();
 
@@ -427,7 +421,8 @@ namespace Tetris
 
                 int amountOfBlocks = Enum.GetNames(typeof(Block)).Length;
                 Random rnd = new Random();
-                int blockIndex = rnd.Next(0, amountOfBlocks - 1);
+                //int blockIndex = rnd.Next(0, amountOfBlocks - 1);
+                int blockIndex = rnd.Next(0, 1); // Sets it to only yellow and red for now, adds more later
 
                 switch (blockIndex)
                 {
@@ -526,14 +521,22 @@ namespace Tetris
 
         private void KeyIsDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Down)
+
+            if (e.KeyCode == Keys.Down)
             {
                 int x = currentBlock.Location.X;
                 int y = currentBlock.Location.Y;
 
-                if (true) //statement (make later) to check if block touches another block from below
+                int x_index = (int)((currentBlock.Location.X - blockSize) / blockSize);
+                int y_index = (int)((currentBlock.Location.Y) / blockSize); //problem: why not - blockSize
+                Console.WriteLine("x: " + x_index + ", y: " + y_index);
+
+                if (y_index < (panelHeight - 2)) //statement to check if block touches another block from below
                 {
-                    currentBlock.Location = new Point(x, y + blockSize);
+                    if (block_placeHolders[y_index + 1, x_index] != 1)
+                    {
+                        currentBlock.Location = new Point(x, y + blockSize);
+                    }
                 }
             }
             else if(e.KeyCode == Keys.Left)
