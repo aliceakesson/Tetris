@@ -20,6 +20,7 @@ namespace Tetris
         Green, 
         Turquoise
     }
+
     public partial class Form1 : Form
     {
         
