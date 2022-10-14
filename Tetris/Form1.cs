@@ -145,10 +145,36 @@ namespace Tetris
 
                     if (!collision) //Move block down if it hasn't collided with anything yet
                     {
-                        int x = currentBlock.Location.X;
-                        int y = currentBlock.Location.Y;
+                        int xPos = currentBlock.Location.X;
+                        int yPos = currentBlock.Location.Y;
 
-                        currentBlock.Location = new Point(x, y + blockSize);
+                        //moving script
+                        currentBlock.Location = new Point(xPos, yPos + blockSize);
+
+                        switch(currentType)
+                        {
+                            case Block.Red:
+                                for(int y = 0; y < positions_Red.GetLength(0); y++)
+                                {
+                                    for(int x = 0; x < positions_Red.GetLength(1); x++)
+                                    {
+                                        if (positions_Red[y, x] == 1)
+                                        {
+                                            int startIndex_x = (int)((xPos - blockSize) / blockSize);
+                                            int startIndex_y = (int)((yPos - blockSize) / blockSize);
+                                            Console.WriteLine("startX: " + startIndex_x + ", startY: " + startIndex_y);
+
+                                            block_placeHolders[y + startIndex_y, x + startIndex_x] = 0;
+                                            block_placeHolders[y + startIndex_y + 1, x + startIndex_x] = 2;
+                                        }
+                                    }
+                                }
+                                break;
+                            default:
+                                break; 
+                        }
+
+                        CheckPlayArea();
                     }
 
                     collision = false;
@@ -181,14 +207,24 @@ namespace Tetris
                             }
                         }
                     }
-
                     break;
                 case Block.Red:
                     currentType = type;
                     currentBlock.Controls.Clear();
                     currentBlock.SetBounds(spawnPosition.X - blockSize, spawnPosition.Y, blockSize * 3, blockSize * 2);
 
-                    for(int i = 0; i < positions_Red.GetLength(0); i++)
+
+                    //Clear block_placeholder indexes for currentBlock
+                    for (int y = 0; y < block_placeHolders.GetLength(0); y++)
+                    {
+                        for (int x = 0; x < block_placeHolders.GetLength(1); x++)
+                        {
+                            if (block_placeHolders[y, x] == 2)
+                                block_placeHolders[y, x] = 0;
+                        }
+                    }
+
+                    for (int i = 0; i < positions_Red.GetLength(0); i++)
                     {
                         for(int j = 0; j < positions_Red.GetLength(1); j++)
                         {
@@ -199,6 +235,20 @@ namespace Tetris
                                 pb.Parent = currentBlock;
                                 pb.Visible = true;
                                 pb.BackColor = Color.Red;
+                            }
+                        }
+                    }
+
+                    //Update block_Placeholders
+                    int spawnPosIndex_x = (int)(spawnPosition.X - blockSize) / blockSize;
+                    int spawnPosIndex_y = (int)(spawnPosition.Y - blockSize) / blockSize;
+                    for(int y = 0; y < positions_Red.GetLength(0); y++)
+                    {
+                        for(int x = 0; x < positions_Red.GetLength(1); x++)
+                        {
+                            if (positions_Red[y, x] == 1)
+                            {
+                                block_placeHolders[y + spawnPosIndex_y, x + spawnPosIndex_x - 1] = 2;
                             }
                         }
                     }
@@ -422,7 +472,7 @@ namespace Tetris
                 int amountOfBlocks = Enum.GetNames(typeof(Block)).Length;
                 Random rnd = new Random();
                 //int blockIndex = rnd.Next(0, amountOfBlocks - 1);
-                int blockIndex = rnd.Next(0, 1); // Sets it to only yellow and red for now, adds more later
+                int blockIndex = 1; // Sets it to only red for now, adds more later
 
                 switch (blockIndex)
                 {
@@ -444,6 +494,7 @@ namespace Tetris
 
         void CheckPlayArea()
         {
+            Console.WriteLine("");
             for (int i = 0; i < block_placeHolders.GetLength(0); i++)
             {
                 for (int j = 0; j < block_placeHolders.GetLength(1); j++)
@@ -458,6 +509,7 @@ namespace Tetris
                     }
                 }
             }
+            Console.WriteLine("");
         }
 
         private void CreatePlayArea()
